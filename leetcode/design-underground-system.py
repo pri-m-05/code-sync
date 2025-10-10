@@ -1,27 +1,24 @@
-class UndergroundSystem:
+class UndergroundSystem(object):
 
     def __init__(self):
-        self.in_trip = {}
-        self.stats = {}      
+        self.ppl = {}              
+        self.stats = {}            
 
-    def checkIn(self, id: int, stationName: str, t: int) -> None:
-        self.in_trip[id] = (stationName, t)
-        
+    def checkIn(self, id, stationName, t):
+        self.ppl[id] = (stationName, t)
 
-    def checkOut(self, id: int, stationName: str, t: int) -> None:
-        startStation, time = self.in_trip.pop(id)
+    def checkOut(self, id, stationName, t):
+        startStation, t_in = self.ppl.pop(id)
+        duration = t - t_in
         key = (startStation, stationName)
-        total, cnt = self.stats.get(key, (0, 0))
-        total += (t - time)
-        cnt += 1
-        self.stats[key] = [total, cnt]
-        
+        if key not in self.stats:
+            self.stats[key] = [0, 0]
+        self.stats[key][0] += duration
+        self.stats[key][1] += 1
 
-    def getAverageTime(self, startStation: str, endStation: str) -> float:
-        total, count = self.stats[(startStation, endStation)]
-        return total/count
-
-
+    def getAverageTime(self, startStation, endStation):
+        total, cnt = self.stats[(startStation, endStation)]
+        return float(total) / cnt
 
 # Your UndergroundSystem object will be instantiated and called as such:
 # obj = UndergroundSystem()
