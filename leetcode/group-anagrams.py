@@ -1,15 +1,12 @@
-from collections import defaultdict
-from typing import List
-
-class Solution:
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        if not strs:
-            return []
-            
-        map_groups = defaultdict(list)
-
+class Solution(object):
+    def groupAnagrams(self, strs):
+        seen,fin = {},[]
         for s in strs:
-            key = "".join(sorted(s))
-            map_groups[key].append(s)
-
-        return list(map_groups.values())
+            sorted_word = "".join(sorted(s))
+            if sorted_word in seen:
+                seen[sorted_word].append(s)
+            else:
+                seen[sorted_word] = [s]
+        for n in seen:
+            fin.append(seen[n])
+        return fin
